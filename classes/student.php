@@ -67,13 +67,24 @@ class Student
     public function get_single_std(){
         $sql="Select * from ".$this->tbl_name." where id= :id";
         $data=$this->conn->prepare($sql);
+        $this->id=htmlspecialchars(strip_tags($this->id));
         $data->bindParam(':id',$this->id, PDO::PARAM_INT);
         $data->execute();
         return $data->fetchAll(PDO::FETCH_ASSOC);
         
     }
     public function delite_std(){
-        $sql="delete from ".$this->tbl_name."where id:";
+        $sql="delete from ".$this->tbl_name." where id=:id";
+        $delt_obj=$this->conn->prepare($sql);
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        $delt_obj->bindParam(':id',$this->id, PDO::PARAM_INT);
+        if($delt_obj->execute()){
+            return true;
+        }else{
+            return false;
+        }
+
+
     }
 }
 

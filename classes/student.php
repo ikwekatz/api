@@ -72,5 +72,10 @@ class Student
         return $data->fetchAll(PDO::FETCH_ASSOC);
         
     }
+    public function delite_std(){
+        $sql="delete from ".$this->tbl_name."where id:";
+    }
 }
-?>
+
+
+

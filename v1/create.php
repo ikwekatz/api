@@ -46,7 +46,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
     }else{
 
-    http_response_code(400);// 
+        http_response_code(400);// 
         echo json_encode(array(
         "status"=>0,
         "message"=>"All fields are Required"
@@ -55,7 +55,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     
 }else{
 
-    http_response_code(403);// 
+        http_response_code(403);// 
         echo json_encode(array(
         "status"=>0,
         "message"=>"Access Denied"

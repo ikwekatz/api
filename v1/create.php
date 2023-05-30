@@ -24,19 +24,26 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
     $std->lname=$data->lname;
     $std->email=$data->email;
     $std->phone=$data->phone;
-    if($std->create_data()){
+    try {
+        if ($std->create_data()) {
         http_response_code(200);//
         echo json_encode(array(
         "status"=>1,
         "message"=>"Student has been created Successfull"
-        ));     
-    }else{
-        http_response_code(500);//
+        ));   
+        } else {
+            echo "Failed to insert data.";
+        }
+    } catch (Exception $e) {
+        http_response_code(400);// 
+        $sms = $e->getMessage();
         echo json_encode(array(
         "status"=>0,
-        "message"=>"Failed to Create Student"
-        ));     
+        "message"=> $sms
+        ));  
+        
     }
+
     }else{
 
     http_response_code(400);// 

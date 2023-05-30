@@ -39,23 +39,32 @@ class Student
     }
     public function create_data()
     {
-        $sql="Insert into ".$this->tbl_name." Set fname = :fname, lname = :lname, email = :email, mobile = :phone";
-        $data=$this->conn->prepare($sql);
-        // data sanitization
-        $this->fname=htmlspecialchars(strip_tags($this->fname));
-        $this->lname=htmlspecialchars(strip_tags($this->lname));
-        $this->email=htmlspecialchars(strip_tags($this->email));
-        $this->phone=htmlspecialchars(strip_tags($this->phone));
-        // parameter binding
-        $data->bindParam(':fname', $this->fname, PDO::PARAM_STR);
-        $data->bindParam(':lname', $this->lname, PDO::PARAM_STR);
-        $data->bindParam(':email', $this->email, PDO::PARAM_STR);
-        $data->bindParam(':phone', $this->phone, PDO::PARAM_STR);
-        // try inserting data to  db
-        if($data->execute()){
-            return true;
+        if ($this->isEmailUnique($this->email)) {
+            $sql = "INSERT INTO " . $this->tbl_name . " SET fname = :fname, lname = :lname, email = :email, mobile = :phone";
+            $data = $this->conn->prepare($sql);
+    
+            // Data sanitization
+            $this->fname = htmlspecialchars(strip_tags($this->fname));
+            $this->lname = htmlspecialchars(strip_tags($this->lname));
+            $this->email = htmlspecialchars(strip_tags($this->email));
+            $this->phone = htmlspecialchars(strip_tags($this->phone));
+    
+            // Parameter binding
+            $data->bindParam(':fname', $this->fname, PDO::PARAM_STR);
+            $data->bindParam(':lname', $this->lname, PDO::PARAM_STR);
+            $data->bindParam(':email', $this->email, PDO::PARAM_STR);
+            $data->bindParam(':phone', $this->phone, PDO::PARAM_STR);
+    
+            // Try inserting data into the database
+            if ($data->execute()) {
+                return true;
+            }else {
+                throw new Exception("Failed to insert data into the database.");
+            }
+        } else {
+            throw new Exception("Email already exists.");
         }
-        return false;
+       
     }
      public function get_all_std(){
         $sql="Select * from ".$this->tbl_name;
@@ -85,6 +94,17 @@ class Student
         }
 
 
+    }
+    public function isEmailUnique($email)
+    {
+        $sql = "SELECT COUNT(*) as count FROM " . $this->tbl_name . " WHERE email = :email";
+        $data = $this->conn->prepare($sql);
+        $data->bindParam(':email', $email, PDO::PARAM_STR);
+        $data->execute();
+        $row = $data->fetch(PDO::FETCH_ASSOC);
+        $count = $row['count'];
+
+        return $count == 0; // Returns true if email is unique, false otherwise
     }
 }
 

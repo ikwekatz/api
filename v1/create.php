@@ -28,7 +28,7 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         if ($std->create_data()) {
         http_response_code(200);//
         echo json_encode(array(
-        "status"=>1,
+        "status"=>"Success",
         "message"=>"Student has been created Successfull"
         ));   
         } else {
@@ -38,7 +38,6 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
         http_response_code(400);// 
         $sms = $e->getMessage();
         echo json_encode(array(
-        "status"=>0,
         "message"=> $sms
         ));  
         
@@ -48,7 +47,6 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 
         http_response_code(400);// 
         echo json_encode(array(
-        "status"=>0,
         "message"=>"All fields are Required"
         ));  
 }
@@ -56,9 +54,10 @@ if($_SERVER['REQUEST_METHOD']=="POST"){
 }else{
 
         http_response_code(403);// 
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $sms = $requestMethod." Method Not Allowed here";
         echo json_encode(array(
-        "status"=>0,
-        "message"=>"Access Denied"
+        "message"=> $sms
         ));  
 }
 

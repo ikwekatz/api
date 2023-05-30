@@ -38,11 +38,12 @@ if($_SERVER['REQUEST_METHOD']=="GET"){
 }
 }else{
 
-    http_response_code(403);//
-        echo json_encode(array(
-        "status"=>0,
-        "message"=>"Access Denied"
-        ));
+  http_response_code(403);// 
+  $requestMethod = $_SERVER['REQUEST_METHOD'];
+  $sms = $requestMethod." Method Not Allowed here";
+  echo json_encode(array(
+  "message"=> $sms
+  ));  
 }
 
 ?>
